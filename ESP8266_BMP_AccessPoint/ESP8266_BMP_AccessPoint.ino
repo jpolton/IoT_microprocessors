@@ -28,8 +28,8 @@
 #include <ESP8266WiFi.h>
 #include <WiFiClient.h> 
 #include <ESP8266WebServer.h>
-#//include <Wire.h>
-#//include <SPI.h>
+#include <Wire.h>
+//#include <SPI.h>
 #include <Adafruit_Sensor.h>
 #include <Adafruit_BMP280.h>
 

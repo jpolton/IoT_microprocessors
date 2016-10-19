@@ -1,24 +1,26 @@
-# IoT_microprocessors
+===================
+IoT_microprocessors
+===================
 
 ESP8266 or Arduino (nano) projects to read sensors and stuff.
 
-Contents
-========
 
-README.md:
+README.md
+=========
 
- This file.
+* This file.
 
 ESP8266_BMP_serial_plot.py
+==========================
 
  * Read streaming data from the serial port and plot graphs of temperature and pressure.
  * Data stream created by ESP8266_BMP_serial_plot.ino
 
-ESP8266_BMP_AccessPoint:
+ESP8266_BMP_AccessPoint/
+========================
 
-ESP8266_BMP_AccessPoint.ino
-
-ESP8266_BMP_AccessPoint.py
+file: **ESP8266_BMP_AccessPoint.ino**
+file : **ESP8266_BMP_AccessPoint.py**
 
 * Create a ESP8266 WiFi Access Point server.
 * Read BMP280 pressure module on ESP8266.

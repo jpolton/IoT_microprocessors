@@ -53,16 +53,13 @@ plt.ion() # Tell matplotlib want ot interactive mode to plot data
 cnt=0
 
 duration = 60  # Duration for sampling (s)
-N = 50 # number of data points stored in memory
+N = 250 # number of data points stored in memory
 
 
 def readsensor():
     link = "http://192.168.4.1/pressure"
-    #headers = { 'User-Agent': 'Mozilla/5.0 (Windows NT 6.0; WOW64; rv:24.0) Gecko/20100101 Firefox/24.0' }
-    f = requests.get(link) #, headers=headers)
-    while(len(f.text)==0): # Seem to get empty returns. Avoid this!
-         f = requests.get(link)
-    print f.status_code, ' ',f.text, ':',len(f.text)
+    f = requests.get(link)
+    print f.status_code, ' ',f.text
     dataString = f.text
     #print dataString
     press = float(dataString.split(' ')[1])
@@ -71,11 +68,11 @@ def readsensor():
 #####
 
 tstart = time.time()
-while ( cnt <= N ): # Fill up the data array buffer
+while ( cnt <= N ): # While loop that loops forever
 	press = readsensor()
 	pressArr.append(press)                     #Building our pressure array by appending P readings
 	timeArr.append(time.time()-tstart)
-	print cnt, ': ', press
+	print press
 	cnt=cnt+1
 	if(cnt>N):                            #If you have 50 or more points, delete the first one from the array
 		pressArr.pop(0)
