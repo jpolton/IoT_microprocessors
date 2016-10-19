@@ -28,8 +28,8 @@
 #include <ESP8266WiFi.h>
 #include <WiFiClient.h> 
 #include <ESP8266WebServer.h>
-#include <Wire.h>
-//#include <SPI.h>
+#include <Wire.h> // Communicate with I2C / TWI devices. 
+#include <SPI.h>  // Serial Peripheral Interface
 #include <Adafruit_Sensor.h>
 #include <Adafruit_BMP280.h>
 
@@ -60,7 +60,7 @@ void handleRoot() {
 
 void setup() {
 //	delay(1000);
-	Serial.begin(115200);
+	Serial.begin(9600);
 	Serial.println();
 	Serial.print("Configuring access point...");
 	/* You can remove the password parameter if you want the AP to be open. */

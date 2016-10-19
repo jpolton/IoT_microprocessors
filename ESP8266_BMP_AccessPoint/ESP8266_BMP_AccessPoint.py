@@ -52,20 +52,18 @@ timeArr = []
 plt.ion() # Tell matplotlib want ot interactive mode to plot data
 cnt=0
 
-duration = 60  # Duration for sampling (s)
-N = 50 # number of data points stored in memory
-
+duration = 10  # Duration for sampling (s)
+N = 250 # number of data points stored in memory
+freq = 20 # Expected download freq (Hz). Sets the x-axis range - Had 15Hz to 30Hz
+link = "http://192.168.4.1/pressure"
 
 def readsensor():
-    link = "http://192.168.4.1/pressure"
-    #headers = { 'User-Agent': 'Mozilla/5.0 (Windows NT 6.0; WOW64; rv:24.0) Gecko/20100101 Firefox/24.0' }
-    f = requests.get(link) #, headers=headers)
-    while(len(f.text)==0): # Seem to get empty returns. Avoid this!
-         f = requests.get(link)
-    print f.status_code, ' ',f.text, ':',len(f.text)
-    dataString = f.text
-    #print dataString
-    press = float(dataString.split(' ')[1])
+    #f = requests.get(link) 
+    #while(len(f.text)==0): # Seem to get empty returns. Avoid this!
+    #     f = requests.get(link)
+    #dataString = f.text
+    #press = float(dataString.split(' ')[1])
+    press = float(requests.get(link).text.split(' ')[1])
     return press
 
 #####
@@ -93,7 +91,7 @@ plt.pause(1)
 
 # Set up the plot details
 dp = numpy.max([numpy.max(pressArr) - numpy.min(pressArr), 10])
-plt.ylim( numpy.min(pressArr)-dp*0.5, numpy.max(pressArr)+dp*0.5 )
+plt.ylim( numpy.min(pressArr)-dp, numpy.max(pressArr)+dp )
 plt.xlim( -float(N)/float(30), 0 )
 plt.xlabel('Time since now (s)')
 plt.ylabel('Pressure (Pa)')
@@ -110,7 +108,7 @@ while (time.time()-tstart < tspinup + duration): # While loop that loops forever
 	cnt=cnt+1
 	pressArr.pop(0)
 	timeArr.pop(0)
-	line.set_xdata([ timeArr[i] - timeArr[-1] for i in range(len(timeArr))])
+	line.set_xdata([ timeArr[i] - timeArr[-1] for i in range(N)])
 	line.set_ydata(pressArr)
 	fig.canvas.draw()
 	fig.canvas.flush_events()
