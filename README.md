@@ -2,13 +2,15 @@
 
 ESP8266 or Arduino (nano) projects to read sensors and stuff.
 
-Contents:
+Contents
+========
+
 README.md:
-This file.
+ This file.
 
 ESP8266_BMP_serial_plot.py
-Read streaming data from the serial port and plot graphs of temperature and pressure.
-Data stream created by ESP8266_BMP_serial_plot.ino
+| Read streaming data from the serial port and plot graphs of temperature and pressure.
+| Data stream created by ESP8266_BMP_serial_plot.ino
 
 ESP8266_BMP_AccessPoint:
 ESP8266_BMP_AccessPoint.ino
