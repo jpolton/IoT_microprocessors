@@ -23,12 +23,11 @@
 // SDA,SDI  purp  D4
 // CSB
 // SDO      brn   3V3
-//
 
 #include <ESP8266WiFi.h>
-#include <WiFiClient.h> 
+#include <WiFiClient.h>
 #include <ESP8266WebServer.h>
-#include <Wire.h> // Communicate with I2C / TWI devices. 
+#include <Wire.h> // Communicate with I2C / TWI devices.
 #include <SPI.h>  // Serial Peripheral Interface
 #include <Adafruit_Sensor.h>
 #include <Adafruit_BMP280.h>
@@ -68,7 +67,7 @@ void setup() {
 
 	IPAddress myIP = WiFi.softAPIP();
 	Serial.print("AP IP address: ");
-  
+
 	Serial.println(myIP);
 	server.on("/", handleRoot);
 
@@ -83,13 +82,13 @@ void setup() {
     server.send(200, "text/plain", webString);            // send to someones browser when asked
   });
 
-  
+
 	server.begin();
 	Serial.println("HTTP server started");
 
   Wire.begin(2,0); // GPIO2, GPIOO -> D4, D3
-  Serial.println(F("BMP280 test"));  
-  if (!bme.begin()) {  
+  Serial.println(F("BMP280 test"));
+  if (!bme.begin()) {
     Serial.println("Could not find a valid BMP280 sensor, check wiring!");
     while (1);
   }
@@ -105,11 +104,11 @@ void readsensor() {
   // the sensor is bigger than the interval you set, read the sensor
   // Works better than delay for things happening elsewhere also
   unsigned long currentMillis = millis();
- 
+
   if(currentMillis - previousMillis >= interval) {
-    // save the last time you read the sensor 
-    previousMillis = currentMillis;   
- 
+    // save the last time you read the sensor
+    previousMillis = currentMillis;
+
     // Sensor readings
     //temp_c = bme.readTemperature();     // Read temperature in Celcius
       pressure = bme.readPressure();          // Read pressure in Pa
