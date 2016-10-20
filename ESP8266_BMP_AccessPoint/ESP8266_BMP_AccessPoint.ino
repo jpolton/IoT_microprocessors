@@ -8,6 +8,7 @@
 //          http://192.168.4.1/pressure
 //
 //   BOARD: ESP8266 NodeMCU 1.0 (ESP-12E module)
+//          WeMos D1 R2, upload speed 115200
 //FIRMWARE: Arduino IDE
 // SENSORS: BMP280
 //     URL:
@@ -112,6 +113,7 @@ void readsensor() {
     // Sensor readings
     //temp_c = bme.readTemperature();     // Read temperature in Celcius
       pressure = bme.readPressure();          // Read pressure in Pa
+      Serial.println(pressure);
     // Check if any reads failed and exit early (to try again).
     if (isnan(pressure) || isnan(temp_c)) {
       Serial.println("Failed to read from BMP280 sensor!");
