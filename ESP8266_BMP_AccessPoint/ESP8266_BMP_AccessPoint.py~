@@ -52,8 +52,8 @@ timeArr = []
 plt.ion() # Tell matplotlib want ot interactive mode to plot data
 cnt=0
 
-duration = 10  # Duration for sampling (s)
-N = 50 # number of data points stored in memory
+duration = 10*60  # Duration for sampling (s)
+N = 250 # number of data points stored in memory
 freq = 20 # Expected download freq (Hz). Sets the x-axis range - Had 15Hz to 30Hz
 link = "http://192.168.4.1/pressure"
 
@@ -100,7 +100,7 @@ line, = ax.plot(range(N), 101020*numpy.random.randn(N))
 plt.pause(1)
 
 # Set up the plot details
-dp = numpy.max([numpy.max(pressArr) - numpy.min(pressArr), 10])
+dp = numpy.max([numpy.max(pressArr) - numpy.min(pressArr), 500])
 plt.ylim( numpy.min(pressArr)-dp, numpy.max(pressArr)+dp )
 plt.xlim( -float(N)/float(freq), 0 )
 plt.xlabel('Time since now (s)')

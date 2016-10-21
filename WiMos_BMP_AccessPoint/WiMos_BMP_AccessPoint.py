@@ -59,21 +59,21 @@ link = "http://192.168.4.1/pressure"
 
 def readsensor():
     startread = time.time()
-    print 'pre'
+    #print 'pre'
     try:
 	    f = requests.get(link)
     except requests.exceptions.ConnectionError:
 	    r.status_code = "Connection refused"
 
 #    f = requests.get(link, timeout=1)  # It gets stuck here
-    print 'post', f
+    #print 'post', f
     while(len(f.text)==0): # Seem to get empty returns. Avoid this!
          f = requests.get(link, timeout=2)
          print '.'
     dataString = f.text
     press = float(dataString.split(' ')[1])
     #press = float(requests.get(link).text.split(' ')[1])
-    print 'time in readsensor:', time.time() - startread
+    #print 'time in readsensor:', time.time() - startread
     return press
 
 #####
@@ -106,7 +106,7 @@ plt.xlim( -float(N)/float(freq), 0 )
 plt.xlabel('Time since now (s)')
 plt.ylabel('Pressure (Pa)')
 plt.grid(True)
-line, = ax.plot( timeArr, pressArr )
+line, = ax.plot( timeArr, pressArr,'.' )
 
 cnt = 0
 
