@@ -8,6 +8,9 @@ README.md
 =========
 
 * This file.
+Had some issues getting the WiFi stable at work compared to home. Perhaps there is something lurking in the WiFi settings that are satisfied on the home network but not at work... Try flashing the devise.
+
+esptool.py -p /dev/tty.wchusbserial1410 erase_flash
 
 ----
 
