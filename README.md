@@ -15,8 +15,8 @@ README.md
 Pressure streaming projects
 ===========================
 
-BMP280 streaming pressure through a ESP8266 WiFi Access Point. Also include python scripts to GET and stream realtime data using matplotlib. Note the ESP8266 was stabilised using a voltage regulator (ADD DETAILS). This project was developed and tested on two boards:
-ESP8266 NodeMCU 1.0 (ESP-12E module) and WeMos D1 R2. Each had their own .ino and .py file for development purposes and fiddling with soft variables but they are essentially the same. 
+BMP280 streaming pressure through a ESP8266 WiFi Access Point. Also include python scripts to GET and stream realtime data using matplotlib. Note the ESP8266 was stabilised using a voltage regulator (3.3V Step-Up Voltage Regulator U1V10F3). This project was developed and tested on two boards:
+ESP8266 NodeMCU 1.0 (ESP-12E module) and WeMos D1 R2. Each had their own .ino and .py file for development purposes and fiddling with soft variables but they are essentially the same.
 
 WIRING::
 
@@ -28,7 +28,7 @@ WIRING::
   CSB
   SDO      brn   3V3 <--> VOUT of voltage regulator
 
-  Voltage regulator:
+  Voltage regulator (3.3V Step-Up Voltage Regulator U1V10F3. http://www.hobbytronics.co.uk/u1v10f3-3v3-regulator?keyword=U1V10F3):
   VOUT --> BMP280 VCC & SDO
   VIN  --> 2x AA 1.5V batteries in series
   GND  --> 2x AA 1.5V batteries in series
