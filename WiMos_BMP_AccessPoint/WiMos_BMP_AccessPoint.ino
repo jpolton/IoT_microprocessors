@@ -55,12 +55,12 @@ float value = 0; // smoothed sensor value
  */
 void handleRoot() {
 	server.send(200, "text/html", "<h1>You are connected</h1>");
-//  delay(100);
+  delay(100);
 }
 
 void setup() {
-//	delay(1000);
-	Serial.begin(9600);
+  Serial.begin(9600);
+	delay(1000);
 	Serial.println();
 	Serial.print("Configuring access point...");
 	/* You can remove the password parameter if you want the AP to be open. */
@@ -113,7 +113,7 @@ void readsensor() {
     // Sensor readings
     //temp_c = bme.readTemperature();     // Read temperature in Celcius
       pressure = bme.readPressure();          // Read pressure in Pa
-      Serial.println(pressure);
+    //  Serial.println(pressure);
     // Check if any reads failed and exit early (to try again).
     if (isnan(pressure) || isnan(temp_c)) {
       Serial.println("Failed to read from BMP280 sensor!");

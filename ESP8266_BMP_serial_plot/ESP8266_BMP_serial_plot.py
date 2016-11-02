@@ -44,8 +44,8 @@ arduinoData = serial.Serial('/dev/tty.SLAB_USBtoUART',9600) # create serial obje
 plt.ion() # Tell matplotlib want ot interactive mode to plot data
 cnt=0
 
-duration = 20  # Duration for sampling (s)
-N = 250 # number of data points stored in memory
+duration = 30*60  # Duration for sampling (s)
+N = 50 # number of data points stored in memory
 
 
 def makeFig(): # Create a function for the entire plot
@@ -61,7 +61,7 @@ def makeFig(): # Create a function for the entire plot
 #	plt2.set_ylabel('Pressure (Pa)')                    #label second y axis
 #	plt2.ticklabel_format(useOffset=False)           #Force matplotlib to NOT autoscale y axis
 #	plt2.legend(loc='upper right')                  #plot the legend
-					    
+
 # Skip first reading as it may be incomplete
 while (arduinoData.inWaiting()==0): #Wait here until there is data
 	pass #do nothing
@@ -95,13 +95,13 @@ line, = ax.plot(range(N), 101020*numpy.random.randn(N))
 plt.pause(1)
 
 # Set up the plot details
-dp = numpy.max(pressArr) - numpy.min(pressArr)
+dp = numpy.max([numpy.max(pressArr) - numpy.min(pressArr), 10])
 plt.ylim( numpy.min(pressArr)-dp*0.5, numpy.max(pressArr)+dp*0.5 )
 plt.xlim( -float(N)/float(30), 0 )
 plt.xlabel('Time since now (s)')
 plt.ylabel('Pressure (Pa)')
 plt.grid(True)
-line, = ax.plot( timeArr, pressArr ) 
+line, = ax.plot( timeArr, pressArr )
 
 cnt = 0
 
@@ -127,6 +127,3 @@ while (time.time()-tstart < duration): # While loop that loops forever
 
 print 'Freq:',cnt/float(duration),'Hz'
 arduinoData.close()
-
-
-

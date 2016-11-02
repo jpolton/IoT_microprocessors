@@ -52,18 +52,28 @@ timeArr = []
 plt.ion() # Tell matplotlib want ot interactive mode to plot data
 cnt=0
 
-duration = 10  # Duration for sampling (s)
+duration = 10*60  # Duration for sampling (s)
 N = 250 # number of data points stored in memory
 freq = 20 # Expected download freq (Hz). Sets the x-axis range - Had 15Hz to 30Hz
 link = "http://192.168.4.1/pressure"
 
 def readsensor():
-    #f = requests.get(link) 
-    #while(len(f.text)==0): # Seem to get empty returns. Avoid this!
-    #     f = requests.get(link)
-    #dataString = f.text
-    #press = float(dataString.split(' ')[1])
-    press = float(requests.get(link).text.split(' ')[1])
+    startread = time.time()
+    print 'pre'
+    try:
+	    f = requests.get(link)
+    except requests.exceptions.ConnectionError:
+	    r.status_code = "Connection refused"
+
+#    f = requests.get(link, timeout=1)  # It gets stuck here
+    print 'post', f
+    while(len(f.text)==0): # Seem to get empty returns. Avoid this!
+         f = requests.get(link, timeout=2)
+         print '.'
+    dataString = f.text
+    press = float(dataString.split(' ')[1])
+    #press = float(requests.get(link).text.split(' ')[1])
+    print 'time in readsensor:', time.time() - startread
     return press
 
 #####
@@ -82,7 +92,7 @@ while ( cnt <= N ): # Fill up the data array buffer
 
 # Setting the plot up
 fig, ax = plt.subplots()
-line, = ax.plot(numpy.linspace(-float(N)/float(30), 0, N), numpy.random.randn(N))
+line, = ax.plot(numpy.linspace(-float(N)/float(freq), 0, N), numpy.random.randn(N))
 ax.lines.remove(line) # remove line from bg
 fig.canvas.draw()
 line, = ax.plot(range(N), 101020*numpy.random.randn(N))
@@ -90,9 +100,9 @@ line, = ax.plot(range(N), 101020*numpy.random.randn(N))
 plt.pause(1)
 
 # Set up the plot details
-dp = numpy.max([numpy.max(pressArr) - numpy.min(pressArr), 10])
+dp = numpy.max([numpy.max(pressArr) - numpy.min(pressArr), 500])
 plt.ylim( numpy.min(pressArr)-dp, numpy.max(pressArr)+dp )
-plt.xlim( -float(N)/float(30), 0 )
+plt.xlim( -float(N)/float(freq), 0 )
 plt.xlabel('Time since now (s)')
 plt.ylabel('Pressure (Pa)')
 plt.grid(True)

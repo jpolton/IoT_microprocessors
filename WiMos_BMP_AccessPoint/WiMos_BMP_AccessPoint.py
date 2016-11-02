@@ -41,13 +41,15 @@
 
 
 import requests
-import numpy
+import numpy as np
 import matplotlib.pyplot as plt
 import time
 
 tempArr = []
 pressArr = []
 timeArr = []
+pressLog = []
+timeLog = []
 
 plt.ion() # Tell matplotlib want ot interactive mode to plot data
 cnt=0
@@ -57,23 +59,28 @@ N = 250 # number of data points stored in memory
 freq = 20 # Expected download freq (Hz). Sets the x-axis range - Had 15Hz to 30Hz
 link = "http://192.168.4.1/pressure"
 
+def running_mean(x, N):
+    cumsum = np.cumsum(np.insert(x, 0, 0))
+    return (cumsum[N:] - cumsum[:-N]) / N
+
 def readsensor():
     startread = time.time()
-    print 'pre'
+    #print 'pre'
+
     try:
-	    f = requests.get(link)
+ 	       f = requests.get(link)
     except requests.exceptions.ConnectionError:
-	    r.status_code = "Connection refused"
+	       f.status_code = "Connection refused"
 
 #    f = requests.get(link, timeout=1)  # It gets stuck here
-    print 'post', f
+    #print 'post', f
     while(len(f.text)==0): # Seem to get empty returns. Avoid this!
          f = requests.get(link, timeout=2)
          print '.'
     dataString = f.text
     press = float(dataString.split(' ')[1])
     #press = float(requests.get(link).text.split(' ')[1])
-    print 'time in readsensor:', time.time() - startread
+    #print 'time in readsensor:', time.time() - startread
     return press
 
 #####
@@ -92,35 +99,51 @@ while ( cnt <= N ): # Fill up the data array buffer
 
 # Setting the plot up
 fig, ax = plt.subplots()
-line, = ax.plot(numpy.linspace(-float(N)/float(freq), 0, N), numpy.random.randn(N))
+line, = ax.plot(np.linspace(-float(N)/float(freq), 0, N), np.random.randn(N))
 ax.lines.remove(line) # remove line from bg
 fig.canvas.draw()
-line, = ax.plot(range(N), 101020*numpy.random.randn(N))
+line, = ax.plot(range(N), 101020*np.random.randn(N))
 
 plt.pause(1)
 
 # Set up the plot details
-dp = numpy.max([numpy.max(pressArr) - numpy.min(pressArr), 500])
-plt.ylim( numpy.min(pressArr)-dp, numpy.max(pressArr)+dp )
+dp = np.max([np.max(pressArr) - np.min(pressArr), 50])
+plt.ylim( np.min(pressArr)-dp, np.max(pressArr)+dp )
 plt.xlim( -float(N)/float(freq), 0 )
 plt.xlabel('Time since now (s)')
 plt.ylabel('Pressure (Pa)')
 plt.grid(True)
-line, = ax.plot( timeArr, pressArr )
+line, = ax.plot( timeArr, pressArr,'.' )
 
 cnt = 0
 
 tspinup = time.time() - tstart
 while (time.time()-tstart < tspinup + duration): # While loop that loops forever
-	press = readsensor()
-	pressArr.append(press)                     #Building our pressure array by appending P readings
-	timeArr.append(time.time()-tstart)
-	cnt=cnt+1
-	pressArr.pop(0)
-	timeArr.pop(0)
-	line.set_xdata([ timeArr[i] - timeArr[-1] for i in range(N)])
-	line.set_ydata(pressArr)
-	fig.canvas.draw()
-	fig.canvas.flush_events()
+    press = readsensor()
+    pressArr.append(press)                     #Building our pressure array by appending P readings
+    timeArr.append(time.time()-tstart)
+    cnt=cnt+1
+    pressArr.pop(0)
+    timeArr.pop(0)
+    line.set_xdata([ timeArr[i] - timeArr[-1] for i in range(N)])
+    smoothArr = np.insert( np.insert( running_mean(pressArr, 3), \
+        -1,pressArr[-1]), 0,pressArr[0])  # 3 point running mean. Pad out end with actual values. Would be better to POP after this.
+#	line.set_ydata(pressArr)
+    line.set_ydata(smoothArr)
+    fig.canvas.draw()
+    fig.canvas.flush_events()
+    #print [np.shape(pressArr)]
+    #print np.size(pressArr), np.size(running_mean(pressArr, 9))
+
+    if (np.mod( int(time.time()-tstart-tspinup) , 60) == 0):
+        pressLog.append(press)
+        timeLog.append( time.time()-tstart-tspinup)
 
 print 'Freq:',cnt/float(duration),'Hz'
+
+# Add final plot to show summary log data. Exporting data to mySQL database would be better.
+fig, ax = plt.subplots()
+line, = ax.plot(timeLog, pressLog)
+plt.xlabel('Time (s)')
+plt.ylabel('Pressure (Pa)')
+fig.canvas.draw()
