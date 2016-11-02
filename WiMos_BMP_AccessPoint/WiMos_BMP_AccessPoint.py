@@ -48,6 +48,8 @@ import time
 tempArr = []
 pressArr = []
 timeArr = []
+pressLog = []
+timeLog = []
 
 plt.ion() # Tell matplotlib want ot interactive mode to plot data
 cnt=0
@@ -133,4 +135,15 @@ while (time.time()-tstart < tspinup + duration): # While loop that loops forever
     #print [np.shape(pressArr)]
     #print np.size(pressArr), np.size(running_mean(pressArr, 9))
 
+    if (np.mod( int(time.time()-tstart-tspinup) , 60) == 0):
+        pressLog.append(press)
+        timeLog.append( time.time()-tstart-tspinup)
+
 print 'Freq:',cnt/float(duration),'Hz'
+
+# Add final plot to show summary log data. Exporting data to mySQL database would be better.
+fig, ax = plt.subplots()
+line, = ax.plot(timeLog, pressLog)
+plt.xlabel('Time (s)')
+plt.ylabel('Pressure (Pa)')
+fig.canvas.draw()
