@@ -107,7 +107,7 @@ line, = ax.plot(range(N), 101020*np.random.randn(N))
 plt.pause(1)
 
 # Set up the plot details
-dp = np.max([np.max(pressArr) - np.min(pressArr), 50])
+dp = np.max([np.max(pressArr) - np.min(pressArr), 10])
 plt.ylim( np.min(pressArr)-dp, np.max(pressArr)+dp )
 plt.xlim( -float(N)/float(freq), 0 )
 plt.xlabel('Time since now (s)')
